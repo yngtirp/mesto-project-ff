@@ -20,13 +20,13 @@ initialCards.forEach((elem) => {
 })
 
 editProfileButton.addEventListener("click", (evt) => { 
-  setOpenedModal(document.querySelector(".popup_type_edit"))
-  showModal(openedModal);
+  const modalSelector = document.querySelector(".popup_type_edit");
+  showModal(modalSelector);
 })
 
 addCardButton.addEventListener("click", (evt) => { 
-  setOpenedModal(document.querySelector(".popup_type_new-card"));
-  showModal(openedModal);
+  const modalSelector = document.querySelector(".popup_type_new-card");
+  showModal(modalSelector);
 })
 
 editProfileForm.addEventListener("submit", handleFormSubmit);

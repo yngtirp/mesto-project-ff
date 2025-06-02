@@ -7,11 +7,11 @@ export const setOpenedModal = (target) => {
 }
 
 export const showModal = (target) => { 
-  console.log(target)
   if (target === document.querySelector(".popup_type_edit")) { 
     personName.value = document.querySelector(".profile__title").textContent;
     personDescription.value = document.querySelector(".profile__description").textContent;
   }
+  setOpenedModal(target);
   target.classList.add("popup_is-opened");
   target.addEventListener("click", ModalListenerClick);
   target.parentElement.addEventListener("keydown", ModalListenerKeyboard);
@@ -36,7 +36,6 @@ export const ModalListenerKeyboard = (evt) => {
 } 
 
 export const handleFormSubmit = (evt) => { 
-  console.log(evt.target)
   evt.preventDefault();
   document.querySelector(".profile__title").textContent = personName.value;
   document.querySelector(".profile__description").textContent = personDescription.value;
@@ -52,7 +51,7 @@ export const addCardFormSubmit = (evt) => {
 }
 
 export const showPicturePopup = (evt, nameValue) => { 
-  openedModal = document.querySelector(".popup_type_image");
+  setOpenedModal(document.querySelector(".popup_type_image"));
   const imgShowPopup = document.querySelector(".popup__image");
   const imgDescriptionShowPopup = document.querySelector(".popup__caption");
   imgShowPopup.src = evt.target.src;
