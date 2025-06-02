@@ -1,8 +1,8 @@
 import { personName, personDescription, placeName, placeLink, cardList, addCardForm} from "./index.js";
-import {createCard, addCard, deleteCard, likeButtonState} from "./card.js";
-export let openedModal;
+import {createCard, deleteCard, likeButtonState} from "./card.js";
+let openedModal;
 
-export const setOpenedModal = (target) => { 
+const setOpenedModal = (target) => { 
   openedModal = target;
 }
 
@@ -13,23 +13,23 @@ export const showModal = (target) => {
   }
   setOpenedModal(target);
   target.classList.add("popup_is-opened");
-  target.addEventListener("click", ModalListenerClick);
-  target.parentElement.addEventListener("keydown", ModalListenerKeyboard);
+  target.addEventListener("click", modalListenerClick);
+  document.addEventListener("keydown", modalListenerKeyboard);
 }
 
 export const closeModal = (target) => { 
   target.classList.remove("popup_is-opened");
-  target.removeEventListener("click", ModalListenerClick);
-  target.parentElement.removeEventListener("keydown", ModalListenerKeyboard);
+  target.removeEventListener("click", modalListenerClick);
+  target.parentElement.removeEventListener("keydown", modalListenerKeyboard);
 }
 
-export const ModalListenerClick = (evt) => { 
+const modalListenerClick = (evt) => { 
   if (evt.target.classList.contains("popup") || evt.target.classList.contains("popup__close")) {
     closeModal(openedModal);
   }
 }
 
-export const ModalListenerKeyboard = (evt) => { 
+const modalListenerKeyboard = (evt) => { 
   if (evt.key === "Escape") { 
     closeModal(openedModal);
   }

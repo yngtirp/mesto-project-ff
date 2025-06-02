@@ -1,7 +1,7 @@
 import '../index.css';
 import {initialCards} from './cards.js';
 import {createCard, addCard, deleteCard, likeButtonState} from "./card.js";
-import {showModal, closeModal, ModalListenerClick, ModalListenerKeyboard, handleFormSubmit, addCardFormSubmit, showPicturePopup, openedModal, setOpenedModal} from "./modal.js";
+import {showModal, handleFormSubmit, addCardFormSubmit, showPicturePopup} from "./modal.js";
 
 export const cardList = document.querySelector(".places__list");
 export const cardTemplate = document.querySelector("#card-template").content;
