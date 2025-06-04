@@ -1,11 +1,9 @@
-import { cardList, cardTemplate } from "./index.js";
-
 export const createCard = (nameValue, linkValue, deleteCard, likeButtonState, showPicturePopup) => {
+  const cardTemplate = document.querySelector("#card-template").content;
   const card = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = card.querySelector(".card__delete-button");
   const likeButton = card.querySelector(".card__like-button");
   const cardImage = card.querySelector(".card__image");
-
   card.querySelector(".card__title").textContent = nameValue;
 
   cardImage.src = linkValue;
@@ -18,12 +16,8 @@ export const createCard = (nameValue, linkValue, deleteCard, likeButtonState, sh
   return card;
 }
 
-export const addCard = (card) => { 
-  cardList.append(card);
-}
-
-export const deleteCard = (cardListItem) => { 
-  cardListItem.remove();
+export const deleteCard = (card) => { 
+  card.remove();
 }
 
 export const likeButtonState = (target) => {
