@@ -29,23 +29,31 @@ export const createCard = (nameValue, linkValue, deleteCard, likeButtonState,
 }
 
 export const deleteCard = (config, cardId, card, deleteCardFromServer) => { 
-  deleteCardFromServer(config, cardId);
-  card.remove();
+  deleteCardFromServer(config, cardId)
+  .then(res => {
+    card.remove();
+  })
+  .catch(err => console.log(err))
 }
 
 export const likeButtonState = (target, config, cardId, likesCount, likeCard, unlikeCard) => {
-  likeCard(config, cardId)
-  .then(data => {
-    target.classList.add("card__like-button_is-active");
-    likesCount.textContent = data.likes.length;
-  })
-  unlikeCard(config, cardId)
-  .then(data => {
-    target.classList.remove("card__like-button_is-active");
-    if (likesCount.textContent === "1") { 
-      likesCount.textContent = "";
-    } else { 
+  if (!target.classList.contains("card__like-button_is-active")) {
+    likeCard(config, cardId)
+    .then(data => {
+      target.classList.add("card__like-button_is-active");
       likesCount.textContent = data.likes.length;
-    }
-  })
+    })
+    .catch(err => console.log(err))
+  } else {
+    unlikeCard(config, cardId)
+    .then(data => {
+      target.classList.remove("card__like-button_is-active");
+      if (likesCount.textContent === "1") { 
+        likesCount.textContent = "";
+      } else { 
+        likesCount.textContent = data.likes.length;
+      }
+    })
+    .catch(err => console.log(err))
+  }
 }

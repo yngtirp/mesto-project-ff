@@ -50,9 +50,9 @@ const addCard = (card, cardList) => {
 }
 
 const editInputEditProfile = () => {
-  clearValidation(editProfileModal, validationConfig);
   personName.value = profileTitle.textContent;
   personDescription.value = profileDesciption.textContent;
+  clearValidation(editProfileModal, validationConfig);
 }
 
 const editProfileFormSubmit = (evt) => { 
@@ -63,8 +63,11 @@ const editProfileFormSubmit = (evt) => {
       profileTitle.textContent = data.name;
       profileDesciption.textContent = data.about;
       closeModal(editProfileModal);
-      editProfileFormSubmitButton.textContent = "Сохранить";
     })
+    .catch(err => console.log(err))
+    .finally(() => { 
+      editProfileFormSubmitButton.textContent = "Сохранить";
+    });
 };
 
 
@@ -82,8 +85,11 @@ const addCardFormSubmit = (evt) => {
       clearValidation(newCardModal, validationConfig);
       closeModal(newCardModal);
       addCardForm.reset();
-      addCardFormSubmitButton.textContent = "Сохранить";
     })
+    .catch(err => console.log(err))
+    .finally(() => { 
+      addCardFormSubmitButton.textContent = "Сохранить";
+    });
 }
 
 const updateAvatarFormSubmit = (evt) => { 
@@ -94,8 +100,11 @@ const updateAvatarFormSubmit = (evt) => {
     profileAvatar.style.backgroundImage = `url(${res.avatar})`;  
       closeModal(updateAvatarModal);
       updateAvatarForm.reset(); 
-      updateAvatarSubmitButton.textContent = "Сохранить";
   })
+  .catch(err => console.log(err))
+  .finally(() => { 
+    updateAvatarSubmitButton.textContent = "Сохранить";
+  });
 }
 
 const showPicturePopup = (evt, nameValue) => { 
@@ -128,8 +137,7 @@ enableValidation(validationConfig);
 
 const showLikes = (currentLikes) => currentLikes || "";
 
-Promise.all([getProfileInfo(config, profileTitle, profileDesciption, 
-  profileAvatar), getCards(config)])
+Promise.all([getProfileInfo(config), getCards(config)])
 .then(([userData, cards]) => {
   myId = userData._id;
   cards.forEach((cardInfoObject) => {
@@ -140,4 +148,8 @@ Promise.all([getProfileInfo(config, profileTitle, profileDesciption,
       deleteCardFromServer, likeCard, unlikeCard);
       addCard(card, cardList);
     }) 
+  profileTitle.textContent = userData.name;
+  profileDesciption.textContent = userData.about;
+  profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
 })
+.catch(err => console.log(err));

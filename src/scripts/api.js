@@ -1,33 +1,22 @@
-export const getProfileInfo = (config, profileTitle, profileDesciption, profileAvatar) => {
+const getResponseData = (res) => {
+  if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`); 
+  }
+  return res.json();
+}
+
+export const getProfileInfo = (config) => {
   return fetch(`${config.baseUrl}/users/me`, {
   headers: config.headers
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка при получении данных профиля: ${res.status}`);
-    }
-    return res.json();
-  })
-  .then((result) => {
-    profileTitle.textContent = result.name;
-    profileDesciption.textContent = result.about;
-    profileAvatar.style.backgroundImage = `url(${result.avatar})`;
-    return result;
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 }
 
 export const getCards = (config) => {
   return fetch(`${config.baseUrl}/cards`, {
   headers: config.headers
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка при получении карточек: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 }
 
 export const updateProfileInfo = (config, profileName, profileDescription) => {
@@ -39,13 +28,7 @@ export const updateProfileInfo = (config, profileName, profileDescription) => {
       about: profileDescription
     })
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка обновления данных профиля: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 
@@ -58,13 +41,7 @@ export const addNewCardOnServer = (config, cardName, cardLink) => {
       link: cardLink
     })
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка добавления карточки: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 
@@ -73,13 +50,7 @@ export const deleteCardFromServer = (config, cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка при удалении карточки: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 export const likeCard = (config, cardId) => {
@@ -87,13 +58,7 @@ export const likeCard = (config, cardId) => {
     method: 'PUT',
     headers: config.headers
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка установки лайка: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 export const unlikeCard = (config, cardId) => {
@@ -101,13 +66,7 @@ export const unlikeCard = (config, cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка удаления лайка: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 export const updateAvatar = (config, newAvatarLink) => {
@@ -118,11 +77,5 @@ export const updateAvatar = (config, newAvatarLink) => {
       avatar: newAvatarLink
     })
   })
-  .then(res => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка обновления аватара: ${res.status}`);
-    }
-    return res.json();
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
