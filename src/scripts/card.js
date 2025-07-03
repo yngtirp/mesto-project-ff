@@ -1,8 +1,6 @@
-import { deleteCardFromServer, likeCard, unlikeCard } from "./api";
-
 export const createCard = (nameValue, linkValue, deleteCard, likeButtonState, 
   showPicturePopup, currentLikes, config, 
-  cardId, likesArray, ownerId, myId) => {
+  cardId, likesArray, ownerId, myId, deleteCardFromServer, likeCard, unlikeCard) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const card = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = card.querySelector(".card__delete-button");
@@ -23,19 +21,19 @@ export const createCard = (nameValue, linkValue, deleteCard, likeButtonState,
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  deleteButton.addEventListener("click", () => deleteCard(config, cardId, card));
-  likeButton.addEventListener("click", () => likeButtonState(likeButton, config, cardId, likesCount));
+  deleteButton.addEventListener("click", () => deleteCard(config, cardId, card, deleteCardFromServer));
+  likeButton.addEventListener("click", () => likeButtonState(likeButton, config, cardId, likesCount, likeCard, unlikeCard));
   cardImage.addEventListener("click", (evt) => showPicturePopup(evt, nameValue));
   
   return card;
 }
 
-export const deleteCard = (config, cardId, card) => { 
+export const deleteCard = (config, cardId, card, deleteCardFromServer) => { 
   deleteCardFromServer(config, cardId);
   card.remove();
 }
 
-export const likeButtonState = (target, config, cardId, likesCount) => {
+export const likeButtonState = (target, config, cardId, likesCount, likeCard, unlikeCard) => {
   likeCard(config, cardId)
   .then(data => {
     target.classList.add("card__like-button_is-active");

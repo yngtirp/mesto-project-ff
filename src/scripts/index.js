@@ -2,7 +2,7 @@ import "../index.css";
 import {createCard, deleteCard, likeButtonState} from "./card.js";
 import {showModal, closeModal} from "./modal.js";
 import {enableValidation, clearValidation} from "./validation.js"
-import {getProfileInfo, getCards, updateProfileInfo, addNewCardOnServer, updateAvatar} from "./api.js"
+import {getProfileInfo, getCards, updateProfileInfo, addNewCardOnServer, updateAvatar, deleteCardFromServer, likeCard, unlikeCard} from "./api.js"
 
 const cardList = document.querySelector(".places__list");
 const profileTitle = document.querySelector(".profile__title");
@@ -77,7 +77,7 @@ const addCardFormSubmit = (evt) => {
         deleteCard, likeButtonState, showPicturePopup, 
         showLikes(cardInfoObject.likes.length), 
         config, cardInfoObject._id, cardInfoObject.likes, 
-        cardInfoObject.owner._id, myId);
+        cardInfoObject.owner._id, myId, deleteCardFromServer, likeCard, unlikeCard);
       cardList.prepend(card);
       clearValidation(newCardModal, validationConfig);
       closeModal(newCardModal);
@@ -136,7 +136,8 @@ Promise.all([getProfileInfo(config, profileTitle, profileDesciption,
     const card = createCard(cardInfoObject.name, cardInfoObject.link, 
       deleteCard, likeButtonState, showPicturePopup, 
       showLikes(cardInfoObject.likes.length), config, 
-      cardInfoObject._id, cardInfoObject.likes, cardInfoObject.owner._id, myId);
+      cardInfoObject._id, cardInfoObject.likes, cardInfoObject.owner._id, myId,
+      deleteCardFromServer, likeCard, unlikeCard);
       addCard(card, cardList);
     }) 
 })
