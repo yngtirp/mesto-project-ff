@@ -100,6 +100,7 @@ const updateAvatarFormSubmit = (evt) => {
     profileAvatar.style.backgroundImage = `url(${res.avatar})`;  
       closeModal(updateAvatarModal);
       updateAvatarForm.reset(); 
+      clearValidation(updateAvatarModal, validationConfig);
   })
   .catch(err => console.log(err))
   .finally(() => { 
