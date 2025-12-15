@@ -30,7 +30,7 @@ const imgDescriptionShowPopup = document.querySelector(".popup__caption");
 const updateAvatarButton = document.querySelector(".profile__image")
 let myId = null;
 const config = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-41',
+  baseUrl: 'http://localhost:3000',
   headers: {
     authorization: "b2069597-819f-48e3-8235-452d763c5957",
     'Content-Type': 'application/json'

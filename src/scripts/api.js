@@ -54,7 +54,7 @@ export const deleteCardFromServer = (config, cardId) => {
 };
 
 export const likeCard = (config, cardId) => {
-  return fetch(`${config.baseUrl}/cards//likes/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers
   })
