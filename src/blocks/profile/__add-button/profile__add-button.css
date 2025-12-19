@@ -16,8 +16,13 @@
   margin-left: auto;
 }
 
-.profile__add-button:hover {
+.profile__add-button:hover:not(:disabled) {
   opacity: 0.6;
+}
+
+.profile__add-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 740px) {

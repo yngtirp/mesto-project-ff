@@ -101,11 +101,9 @@ public class CardController {
         response.setLink(card.getLink());
         response.setCreatedAt(card.getCreatedAt());
         
-        // Convert owner_id to owner object
         CardResponse.Owner owner = new CardResponse.Owner(card.getOwner_id());
         response.setOwner(owner);
         
-        // Convert likes to list of owner objects
         List<CardResponse.Owner> likes = new ArrayList<>();
         if (card.getLikes() != null) {
             for (Like like : card.getLikes()) {

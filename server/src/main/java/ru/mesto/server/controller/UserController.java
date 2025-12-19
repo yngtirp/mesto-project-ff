@@ -18,6 +18,9 @@ public class UserController {
     }
 
     public String handleGetUser(String authorization) {
+        if (authorization == null || authorization.isEmpty()) {
+            return "{\"error\":\"Unauthorized\"}";
+        }
         User user = userDAO.getUserByAuthorization(authorization);
         if (user == null) {
             user = userDAO.createUser(authorization);

@@ -1,6 +1,6 @@
 export const createCard = (nameValue, linkValue, deleteCard, likeButtonState, 
   showPicturePopup, currentLikes, config, 
-  cardId, likesArray, ownerId, myId, deleteCardFromServer, likeCard, unlikeCard) => {
+  cardId, likesArray, ownerId, myId, deleteCardFromServer, likeCard, unlikeCard, isAuthorized = true) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const card = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = card.querySelector(".card__delete-button");
@@ -13,16 +13,25 @@ export const createCard = (nameValue, linkValue, deleteCard, likeButtonState,
   cardImage.alt = `На фото: ${nameValue}`;
   likesCount.textContent = currentLikes
 
-  if (ownerId !== myId) {
+  if (!isAuthorized || ownerId !== myId) {
     deleteButton.remove();
+  } else {
+    deleteButton.addEventListener("click", () => deleteCard(config, cardId, card, deleteCardFromServer));
   }
 
-  if (likesArray && likesArray.some(user => user._id === myId)) {
+  if (isAuthorized && likesArray && likesArray.some(user => user._id === myId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  deleteButton.addEventListener("click", () => deleteCard(config, cardId, card, deleteCardFromServer));
-  likeButton.addEventListener("click", () => likeButtonState(likeButton, config, cardId, likesCount, likeCard, unlikeCard));
+  if (isAuthorized && config) {
+    likeButton.addEventListener("click", () => likeButtonState(likeButton, config, cardId, likesCount, likeCard, unlikeCard));
+    likeButton.style.cursor = 'pointer';
+  } else {
+    likeButton.disabled = true;
+    likeButton.style.opacity = '0.5';
+    likeButton.style.cursor = 'not-allowed';
+  }
+  
   cardImage.addEventListener("click", (evt) => showPicturePopup(evt, nameValue));
   
   return card;

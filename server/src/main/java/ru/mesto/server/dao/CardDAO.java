@@ -64,19 +64,16 @@ public class CardDAO {
     }
 
     public boolean deleteCard(String cardId, String userId) {
-        // Check if user is owner
         String checkSql = "SELECT owner_id FROM cards WHERE _id = ?";
         try (PreparedStatement checkStmt = dbManager.getConnection().prepareStatement(checkSql)) {
             checkStmt.setString(1, cardId);
             ResultSet rs = checkStmt.executeQuery();
             if (rs.next() && rs.getString("owner_id").equals(userId)) {
-                // Delete likes first
                 String deleteLikesSql = "DELETE FROM likes WHERE card_id = ?";
                 try (PreparedStatement deleteLikesStmt = dbManager.getConnection().prepareStatement(deleteLikesSql)) {
                     deleteLikesStmt.setString(1, cardId);
                     deleteLikesStmt.executeUpdate();
                 }
-                // Delete card
                 String deleteSql = "DELETE FROM cards WHERE _id = ?";
                 try (PreparedStatement deleteStmt = dbManager.getConnection().prepareStatement(deleteSql)) {
                     deleteStmt.setString(1, cardId);
@@ -99,7 +96,6 @@ public class CardDAO {
             stmt.executeUpdate();
             return getCardById(cardId);
         } catch (SQLException e) {
-            // Like might already exist
             return getCardById(cardId);
         }
     }

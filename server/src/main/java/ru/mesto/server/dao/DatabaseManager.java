@@ -26,10 +26,8 @@ public class DatabaseManager {
 
     private void initializeDatabase() {
         try {
-            // Load H2 driver
             Class.forName("org.h2.Driver");
             
-            // Create data directory if it doesn't exist
             String dbUrl = config.getProperty("db.url");
             java.io.File dataDir = new java.io.File("./data");
             if (!dataDir.exists()) {
@@ -52,16 +50,16 @@ public class DatabaseManager {
 
     private void createTables() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-            // Users table
             stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
                 "_id VARCHAR(255) PRIMARY KEY, " +
+                "email VARCHAR(255) UNIQUE, " +
+                "password VARCHAR(255), " +
                 "name VARCHAR(255), " +
                 "about TEXT, " +
                 "avatar TEXT, " +
                 "\"authorization\" VARCHAR(255) UNIQUE" +
                 ")");
 
-            // Cards table
             stmt.execute("CREATE TABLE IF NOT EXISTS cards (" +
                 "_id VARCHAR(255) PRIMARY KEY, " +
                 "name VARCHAR(255), " +
@@ -71,7 +69,6 @@ public class DatabaseManager {
                 "FOREIGN KEY (owner_id) REFERENCES users(_id)" +
                 ")");
 
-            // Likes table
             stmt.execute("CREATE TABLE IF NOT EXISTS likes (" +
                 "_id VARCHAR(255) PRIMARY KEY, " +
                 "user_id VARCHAR(255), " +

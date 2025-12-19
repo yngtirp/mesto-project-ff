@@ -79,3 +79,36 @@ export const updateAvatar = (config, newAvatarLink) => {
   })
   .then(getResponseData);
 };
+
+export const signup = (config, email, password, name, about, avatar) => {
+  const body = {
+    email: email,
+    password: password,
+    name: name
+  };
+  if (about) body.about = about;
+  if (avatar) body.avatar = avatar;
+  
+  return fetch(`${config.baseUrl}/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+  .then(getResponseData);
+};
+
+export const signin = (config, email, password) => {
+  return fetch(`${config.baseUrl}/signin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(getResponseData);
+};

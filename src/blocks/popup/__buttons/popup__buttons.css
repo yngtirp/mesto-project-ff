@@ -1,0 +1,37 @@
+.popup__buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  justify-content: center;
+}
+
+.popup__button_type_confirm {
+  background-color: #000;
+  color: #fff;
+}
+
+.popup__button_type_confirm:hover {
+  opacity: 0.8;
+}
+
+.popup__button_type_cancel {
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+}
+
+.popup__button_type_cancel:hover {
+  background-color: #f0f0f0;
+}
+
+@media screen and (max-width: 480px) {
+  .popup__buttons {
+    flex-direction: column;
+  }
+  
+  .popup__button_type_confirm,
+  .popup__button_type_cancel {
+    width: 100%;
+  }
+}
+

@@ -11,9 +11,13 @@
 <div class="page__content">
   <header class="header page__section">
     <img src="<%=require('./images/logo.svg')%>" alt="Логотип проекта масто" class="logo header__logo">
+    <div class="header__auth-container">
+      <button class="header__auth-button" type="button" id="header-auth-button" style="display: none;">Войти</button>
+      <button class="header__logout-button" type="button" id="header-logout-button" style="display: none;">Выйти</button>
+    </div>
   </header>
   <main class="content">
-    <section class="profile page__section">
+    <section class="profile page__section" id="profile-section" style="display: none;">
       <button class="profile__image" style = "background-image: url(&quot;https://preview.redd.it/you-guys-know-what-this-cat-is-called-i-cant-find-it-v0-8lhs4eq1hqed1.jpeg?width=1170&format=pjpg&auto=webp&s=17399881f58a779f5677974ab0662d95c9b7e072&quot;);"></button>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
@@ -29,7 +33,7 @@
   </main>
   <footer class="footer page__section">
     <p class="footer__copyright">
-      © 2021 Mesto Russia
+      © 2025 Mesto Russia
     </p>
   </footer>
   <div class="popup popup_type_edit popup_is-animated">
@@ -74,6 +78,53 @@
       <button type="button" class="popup__close"></button>
       <img src="" alt="" class="popup__image">
       <p class="popup__caption"></p>
+    </div>
+  </div>
+  <div class="popup popup_type_signin popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Вход</h3>
+      <form class="popup__form" name="signin" novalidate>
+        <div class="popup__error-message" id="signin-error" style="display: none;"></div>
+        <input id="signin-email" type="email" name="email" class="popup__input" placeholder="Email" required>
+        <span class="form__input-error signin-email-error"></span>
+        <input id="signin-password" type="password" name="password" class="popup__input" placeholder="Пароль" required minlength="6">
+        <span class="form__input-error signin-password-error"></span>
+        <button type="submit" class="button popup__button" name="signin_submit_button">Войти</button>
+        <p class="popup__switch">Нет аккаунта? <a href="#" class="popup__link" id="switch-to-signup">Зарегистрироваться</a></p>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_signup popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Регистрация</h3>
+      <form class="popup__form" name="signup" novalidate>
+        <div class="popup__error-message" id="signup-error" style="display: none;"></div>
+        <input id="signup-email" type="email" name="email" class="popup__input" placeholder="Email" required>
+        <span class="form__input-error signup-email-error"></span>
+        <input id="signup-password" type="password" name="password" class="popup__input" placeholder="Пароль" required minlength="6">
+        <span class="form__input-error signup-password-error"></span>
+        <input id="signup-name" type="text" name="name" class="popup__input" placeholder="Имя" required minlength="2" maxlength="40">
+        <span class="form__input-error signup-name-error"></span>
+        <input id="signup-about" type="text" name="about" class="popup__input" placeholder="О себе (необязательно)" maxlength="200">
+        <span class="form__input-error signup-about-error"></span>
+        <input id="signup-avatar" type="url" name="avatar" class="popup__input" placeholder="Ссылка на аватар (необязательно)">
+        <span class="form__input-error signup-avatar-error"></span>
+        <button type="submit" class="button popup__button" name="signup_submit_button">Зарегистрироваться</button>
+        <p class="popup__switch">Уже есть аккаунт? <a href="#" class="popup__link" id="switch-to-signin">Войти</a></p>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_logout popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Выход</h3>
+      <p class="popup__text">Вы уверены, что хотите выйти?</p>
+      <div class="popup__buttons">
+        <button type="button" class="button popup__button popup__button_type_confirm" id="confirm-logout-button">Да, выйти</button>
+        <button type="button" class="button popup__button popup__button_type_cancel" id="cancel-logout-button">Отмена</button>
+      </div>
     </div>
   </div>
 </div>

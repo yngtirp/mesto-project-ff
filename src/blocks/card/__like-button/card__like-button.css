@@ -15,13 +15,20 @@
   transition: 0.3s;
 }
 
-.card__like-button:hover {
+.card__like-button:hover:not(:disabled) {
   opacity: 0.6;
+}
+
+.card__like-button:disabled {
+  cursor: not-allowed;
 }
 
 .like_container { 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  min-width: 21px;
+  flex-shrink: 0;
 }
 
 .likes_counter { 
@@ -33,4 +40,6 @@
   text-align: center;
   display: block;
   margin-top: 3px;
+  min-width: 21px;
+  min-height: 13px;
 }

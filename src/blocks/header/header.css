@@ -1,11 +1,15 @@
 @import url('./__logo/header__logo.css');
+@import url('./__auth-container/header__auth-container.css');
+@import url('./__auth-button/header__auth-button.css');
 
 .header {
   min-height: 120px;
   font-family: 'Inter', Arial, sans-serif;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex-shrink: 0;
+  position: relative;
 }
 
 .header::before {

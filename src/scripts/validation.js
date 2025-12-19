@@ -1,12 +1,16 @@
 const showInputError = (formElement, inputElement, errorMessage, inputErrorClass, errorClass) => { 
+  if (!inputElement.id) return; // Skip if no id
   const errorInputText = formElement.querySelector(`.${inputElement.id}-error`);
+  if (!errorInputText) return; // Skip if error element not found
   errorInputText.textContent = errorMessage;
   inputElement.classList.add(inputErrorClass);
   errorInputText.classList.add(errorClass);
 }
 
 const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) => { 
+  if (!inputElement.id) return; // Skip if no id
   const errorInputText = formElement.querySelector(`.${inputElement.id}-error`);
+  if (!errorInputText) return; // Skip if error element not found
   errorInputText.textContent = "";
   inputElement.classList.remove(inputErrorClass);
   errorInputText.classList.remove(errorClass);

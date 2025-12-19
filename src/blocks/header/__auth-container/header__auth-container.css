@@ -1,0 +1,9 @@
+.header__auth-container {
+  margin-left: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+

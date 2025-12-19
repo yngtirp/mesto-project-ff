@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import ru.mesto.server.config.Config;
+import ru.mesto.server.controller.AuthController;
 import ru.mesto.server.controller.CardController;
 import ru.mesto.server.controller.UserController;
 import ru.mesto.server.util.Logger;
@@ -18,11 +19,13 @@ public class Server {
     private HttpServer server;
     private UserController userController;
     private CardController cardController;
+    private AuthController authController;
     private AdminConsole adminConsole;
 
     public Server() {
         userController = new UserController();
         cardController = new CardController();
+        authController = new AuthController();
         adminConsole = new AdminConsole();
     }
 
@@ -31,14 +34,14 @@ public class Server {
             int port = config.getIntProperty("server.port", 3000);
             server = HttpServer.create(new InetSocketAddress(port), 0);
             
-            // CORS headers
             server.createContext("/", new CORSHandler());
             
-            // User endpoints (more specific paths first)
+            server.createContext("/signup", new SignupHandler());
+            server.createContext("/signin", new SigninHandler());
+            
             server.createContext("/users/me/avatar", new AvatarHandler());
             server.createContext("/users/me", new UserHandler());
             
-            // Card endpoints (more specific paths first)
             server.createContext("/cards/likes", new LikeHandler());
             server.createContext("/cards", new CardHandler());
             
@@ -48,7 +51,6 @@ public class Server {
             logger.info("Server started on port " + port);
             System.out.println("Server started on http://localhost:" + port);
             
-            // Start admin console in separate thread
             new Thread(() -> adminConsole.start()).start();
             
         } catch (IOException e) {
@@ -64,7 +66,6 @@ public class Server {
         }
     }
 
-    // CORS Handler
     class CORSHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -79,7 +80,6 @@ public class Server {
         }
     }
 
-    // User Handler
     class UserHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -99,7 +99,11 @@ public class Server {
             try {
                 if ("GET".equals(method)) {
                     String response = userController.handleGetUser(authorization);
-                    sendResponse(exchange, 200, response);
+                    if (response.contains("\"error\"")) {
+                        sendResponse(exchange, 401, response);
+                    } else {
+                        sendResponse(exchange, 200, response);
+                    }
                 } else if ("PATCH".equals(method)) {
                     String response = userController.handleUpdateUser(authorization, 
                         new BufferedReader(new InputStreamReader(exchange.getRequestBody())));
@@ -114,7 +118,6 @@ public class Server {
         }
     }
 
-    // Avatar Handler
     class AvatarHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -146,7 +149,6 @@ public class Server {
         }
     }
 
-    // Card Handler
     class CardHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -186,7 +188,6 @@ public class Server {
         }
     }
 
-    // Like Handler
     class LikeHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -202,7 +203,6 @@ public class Server {
             String authorization = getAuthorization(exchange);
             String path = exchange.getRequestURI().getPath();
             
-            // Handle both /cards/likes/{cardId} and /cards//likes/{cardId} (double slash)
             String cardId = null;
             if (path.startsWith("/cards/likes/")) {
                 cardId = path.substring("/cards/likes/".length());
@@ -234,6 +234,72 @@ public class Server {
         }
     }
 
+    class SignupHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            setCORSHeaders(exchange);
+            String method = exchange.getRequestMethod();
+            
+            if ("OPTIONS".equals(method)) {
+                exchange.sendResponseHeaders(200, -1);
+                exchange.close();
+                return;
+            }
+            
+            logger.info(method + " /signup");
+            
+            try {
+                if ("POST".equals(method)) {
+                    String response = authController.handleSignup(
+                        new BufferedReader(new InputStreamReader(exchange.getRequestBody())));
+                    if (response.contains("\"error\"")) {
+                        sendResponse(exchange, 400, response);
+                    } else {
+                        sendResponse(exchange, 200, response);
+                    }
+                } else {
+                    sendResponse(exchange, 405, "{\"error\":\"Method not allowed\"}");
+                }
+            } catch (Exception e) {
+                logger.error("Error handling signup request: " + e.getMessage());
+                sendResponse(exchange, 500, "{\"error\":\"Internal server error\"}");
+            }
+        }
+    }
+
+    class SigninHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            setCORSHeaders(exchange);
+            String method = exchange.getRequestMethod();
+            
+            if ("OPTIONS".equals(method)) {
+                exchange.sendResponseHeaders(200, -1);
+                exchange.close();
+                return;
+            }
+            
+            logger.info(method + " /signin");
+            
+            try {
+                if ("POST".equals(method)) {
+                    String response = authController.handleSignin(
+                        new BufferedReader(new InputStreamReader(exchange.getRequestBody())));
+                    if (response.contains("\"error\"")) {
+                        sendResponse(exchange, 401, response);
+                    } else {
+                        sendResponse(exchange, 200, response);
+                    }
+                } else {
+                    sendResponse(exchange, 405, "{\"error\":\"Method not allowed\"}");
+                }
+            } catch (Exception e) {
+                logger.error("Error handling signin request: " + e.getMessage());
+                sendResponse(exchange, 500, "{\"error\":\"Internal server error\"}");
+            }
+        }
+    }
+
     private void setCORSHeaders(HttpExchange exchange) {
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
@@ -256,7 +322,6 @@ public class Server {
         Server server = new Server();
         server.start();
         
-        // Shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             server.stop();
             logger.close();

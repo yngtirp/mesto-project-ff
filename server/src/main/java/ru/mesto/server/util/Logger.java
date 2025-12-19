@@ -20,7 +20,6 @@ public class Logger {
         try {
             String logPath = config.getProperty("log.file.path");
             String logFileName = config.getProperty("log.file.name");
-            // Create directory if it doesn't exist
             java.io.File logDir = new java.io.File(logPath);
             if (!logDir.exists()) {
                 logDir.mkdirs();
